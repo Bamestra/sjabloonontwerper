@@ -15,8 +15,7 @@ class Sjabloon extends Migration
     {
         Schema::create('sjabloon', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('naam');
-            $table->timestamps();
+            $table->string('naam')->nullable();
         });
     }
 
