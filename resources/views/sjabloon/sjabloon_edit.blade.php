@@ -14,20 +14,18 @@
     <body>
         <h1>Sjabloon bewerken</h1>
 
-        
+
         <div id="linkerkolom" class="col-md-6">
             <div id="knoppen">
-                <button class="btn btn-success">Toevoegen</button>
-                <button class="btn btn-danger">Verwijderen</button>
-                <button class="btn btn-info">Omhoog</button>
-                <button class="btn btn-info">Omlaag</button>
+                <button id="button_toevoegen" class="btn btn-success">Toevoegen</button>
+                <button id="button_verwijderen" class="btn btn-danger">Verwijderen</button>
             </div>
-            
+
             <div id="jstree_onderdelen"></div>
         </div>
-        
-        
-        
+
+
+
         <div id="rechterkolom" class="col-md-6">
 
             <div class="form-group">
@@ -38,11 +36,12 @@
                 <select class="form-control" id="input_soort">
                     <option value="0">Geen</option>
                     <option value="1">Pagina</option>
-                    <option value="2">Groep</option>
-                    <option value="3">Onderdeel</option>
-                    <option value="4">Dataserie</option>
-                    <option value="5">Datadefinitie</option>
+                    <option value="2">Onderdeel</option>
+                    <option value="3">Dataserie</option>
+                    <option value="4">Datadefinitie</option>
                 </select>
+
+                <button class="btn btn-info">Opslaan</button>
             </div>
 
 
@@ -60,15 +59,26 @@ $('#jstree_onderdelen').jstree({
             url: function (node) {
 
                 // Laravel heeft moeite met de # in 
-                // het eerste request, dus haal hem weg.
+                // het eerste request, dus vervang door een 0.
+                
+                // TODO: 1 vervangen door sjabloon_id.
                 if (node.id === "#") {
-                    return "{{ URL::to('onderdelen/') }}";
+                    return "{{ URL::to('onderdelen/') }}/1/0";
                 } else {
-                    return "{{ URL::to('onderdelen/') }}/" + node.id;
+                    return "{{ URL::to('onderdelen/') }}/1/" + node.id;
                 }
             }
-        }
+        },
+        // Deze regel is nodig om .create_node te laten werken.
+        check_callback: true
     }
+});
+
+$("#button_toevoegen").click(function () {
+
+    var geselecteerdeNode = $('#jstree_onderdelen').jstree('get_selected');
+
+    $('#jstree_onderdelen').jstree().create_node(geselecteerdeNode, {"id": "ajson5", "text": "newly added"});
 });
         </script>
     </body>
