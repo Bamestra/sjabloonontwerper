@@ -34,11 +34,8 @@
 
                 <label for="input_soort">Soort</label>
                 <select class="form-control" id="input_soort">
-                    <option value="0">Geen</option>
-                    <option value="1">Pagina</option>
-                    <option value="2">Onderdeel</option>
-                    <option value="3">Dataserie</option>
-                    <option value="4">Datadefinitie</option>
+                    <option value="0">Groep</option>
+                    <option value="1">Onderdeel</option>
                 </select>
 
                 <button class="btn btn-info">Opslaan</button>
@@ -53,6 +50,8 @@
         <script src="{{ URL::asset('assets/bootstrap/js/bootstrap.min.js') }}"></script>
 
         <script type="text/javascript">
+            var geselecteerdeNode;
+            
 $('#jstree_onderdelen').jstree({
     core: {
         data: {
@@ -60,7 +59,7 @@ $('#jstree_onderdelen').jstree({
 
                 // Laravel heeft moeite met de # in 
                 // het eerste request, dus vervang door een 0.
-                
+
                 // TODO: 1 vervangen door sjabloon_id.
                 if (node.id === "#") {
                     return "{{ URL::to('onderdelen/') }}/1/0";
@@ -69,16 +68,28 @@ $('#jstree_onderdelen').jstree({
                 }
             }
         },
-        // Deze regel is nodig om .create_node te laten werken.
-        check_callback: true
+
+        check_callback: true, // Deze regel is nodig om .create_node te laten werken.
+        multiple: false // Niet meerdere nodes tegelijk selecteren.
     }
 });
 
+$('#jstree_onderdelen').bind("select_node.jstree", function (event, data) {
+    geselecteerdeNode = data.node;
+});
+
 $("#button_toevoegen").click(function () {
+    // Het nieuwe element komt op hetzelfde niveau als de geselecteerde.
 
-    var geselecteerdeNode = $('#jstree_onderdelen').jstree('get_selected');
+    $.ajax({
+        url: "{{ URL::to('onderdelen/create') }}/" + geselecteerdeNode.id,
+        type: 'GET'
+        //success: handleData
+    })
 
-    $('#jstree_onderdelen').jstree().create_node(geselecteerdeNode, {"id": "ajson5", "text": "newly added"});
+    //var geselecteerdeNode = $('#jstree_onderdelen').jstree('get_selected');
+
+    //$('#jstree_onderdelen').jstree().create_node(geselecteerdeNode, {"id": "ajson5", "text": "newly added"});
 });
         </script>
     </body>
