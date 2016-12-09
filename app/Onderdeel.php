@@ -18,15 +18,19 @@ class Onderdeel extends Model {
         'naam',
     ];
     
+    public static function delete_onderdeel($onderdeel) {
+        return DB::table('onderdeel')->where('id', $onderdeel->id)->delete();
+    }   
+    
     // Hernummer alle onderdelen die onder deze staan.
-    public static function hernummerVolgorde($onderdeel) {
+    public static function hernummerVolgorde($onderdeel, $optel) {
         $sql1 = <<<EOD
 UPDATE onderdeel
-SET volgorde = volgorde + 1
+SET volgorde = volgorde + :optel
 WHERE parent_id = :parent_id
 AND volgorde > :volgorde
 EOD;
-        DB::update($sql1, ['parent_id' => $onderdeel->parent_id, 'volgorde' => $onderdeel->volgorde]);
+        DB::update($sql1, ['parent_id' => $onderdeel->parent_id, 'volgorde' => $onderdeel->volgorde, 'optel' => $optel]);
     }
     
     // Maak een nieuwe onderdeel dat in de boom onder deze komt.

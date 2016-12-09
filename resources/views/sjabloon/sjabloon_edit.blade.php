@@ -48,8 +48,8 @@
 
         <script type="text/javascript">
 var geselecteerdeNode;
-
-$('#jstree_onderdelen').jstree({
+var tree=
+        $('#jstree_onderdelen').jstree({
     core: {
         data: {
             url: function (node) {
@@ -69,27 +69,32 @@ $('#jstree_onderdelen').bind("select_node.jstree", function (event, data) {
     geselecteerdeNode = data.node;
 });
 
-$("#button_toevoegen").click(function () {
-    // Het nieuwe element komt op hetzelfde niveau als de geselecteerde.
-
+$('#button_toevoegen').click(function () {
     $.ajax({
         url: "{{ URL::to('onderdelen/create') }}/" + geselecteerdeNode.id,
-        type: 'GET',
         complete: function (jqXHR, textStatus) {
             if (textStatus === 'success') {
-                
-                var node = JSON.parse(jqXHR.responseText);
-                
-                $('#jstree_onderdelen').jstree().create_node(geselecteerdeNode.parent, node.naam, node.volgorde - 1);
+                // Vertaal de request data naar een JSON object.
+                var data = JSON.parse(jqXHR.responseText);
+                // Maak een nieuwe node aan en krijg het gegenereerde ID.
+                var id = $('#jstree_onderdelen').jstree().create_node(geselecteerdeNode.parent, data.naam, data.volgorde - 1);
+                // Stel het gewenste id in, die uit de database komt.    
+                $('#jstree_onderdelen').jstree().set_id(id, data.id);
             }
         }
-    })
-
-    //var geselecteerdeNode = $('#jstree_onderdelen').jstree('get_selected');
-
-    //$('#jstree_onderdelen').jstree().create_node(geselecteerdeNode, {"id": "ajson5", "text": "newly added"});
+    });
 });
 
+$('#button_verwijderen').click(function () {
+    $.ajax({
+        url: "{{ URL::to('onderdelen/delete') }}/" + geselecteerdeNode.id,
+        complete: function (jqXHR, textStatus) {
+            if (textStatus === 'success') {
+                $('#jstree_onderdelen').jstree().delete_node(geselecteerdeNode);
+            }
+        }
+    });
+});
         </script>
     </body>
 </html>
