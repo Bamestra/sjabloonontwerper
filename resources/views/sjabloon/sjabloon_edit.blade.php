@@ -40,9 +40,6 @@
 
                 <button class="btn btn-info">Opslaan</button>
             </div>
-
-
-
         </div>
 
         <script src="{{ URL::asset('assets/jquery/jquery.min.js') }}"></script>
@@ -50,25 +47,19 @@
         <script src="{{ URL::asset('assets/bootstrap/js/bootstrap.min.js') }}"></script>
 
         <script type="text/javascript">
-            var geselecteerdeNode;
-            
+var geselecteerdeNode;
+
 $('#jstree_onderdelen').jstree({
     core: {
         data: {
             url: function (node) {
-
-                // Laravel heeft moeite met de # in 
-                // het eerste request, dus vervang door een 0.
-
-                // TODO: 1 vervangen door sjabloon_id.
                 if (node.id === "#") {
-                    return "{{ URL::to('onderdelen/') }}/1/0";
+                    return "{{ URL::to('onderdelen/paginas') }}/<?= $sjabloon->id ?>";
                 } else {
-                    return "{{ URL::to('onderdelen/') }}/1/" + node.id;
+                    return "{{ URL::to('onderdelen/children') }}/" + node.id;
                 }
             }
         },
-
         check_callback: true, // Deze regel is nodig om .create_node te laten werken.
         multiple: false // Niet meerdere nodes tegelijk selecteren.
     }
@@ -83,14 +74,22 @@ $("#button_toevoegen").click(function () {
 
     $.ajax({
         url: "{{ URL::to('onderdelen/create') }}/" + geselecteerdeNode.id,
-        type: 'GET'
-        //success: handleData
+        type: 'GET',
+        complete: function (jqXHR, textStatus) {
+            if (textStatus === 'success') {
+                
+                var node = JSON.parse(jqXHR.responseText);
+                
+                $('#jstree_onderdelen').jstree().create_node(geselecteerdeNode.parent, node.naam, node.volgorde - 1);
+            }
+        }
     })
 
     //var geselecteerdeNode = $('#jstree_onderdelen').jstree('get_selected');
 
     //$('#jstree_onderdelen').jstree().create_node(geselecteerdeNode, {"id": "ajson5", "text": "newly added"});
 });
+
         </script>
     </body>
 </html>
