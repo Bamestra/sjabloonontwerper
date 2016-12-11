@@ -19,6 +19,8 @@
             <div id="knoppen">
                 <button id="button_toevoegen" class="btn btn-success">Toevoegen</button>
                 <button id="button_verwijderen" class="btn btn-danger">Verwijderen</button>
+                <button id="button_omhoog" class="btn btn-info">Omhoog</button>
+                <button id="button_omlaag" class="btn btn-info">Omlaag</button>
             </div>
 
             <div id="jstree_onderdelen"></div>
@@ -43,13 +45,13 @@
         </div>
 
         <script src="{{ URL::asset('assets/jquery/jquery.min.js') }}"></script>
-        <script src="{{ URL::asset('assets/jstree/jstree.min.js') }}"></script>
+        <script src="{{ URL::asset('assets/jstree/jstree.js') }}"></script>
         <script src="{{ URL::asset('assets/bootstrap/js/bootstrap.min.js') }}"></script>
 
         <script type="text/javascript">
 var geselecteerdeNode;
-var tree=
-        $('#jstree_onderdelen').jstree({
+
+$('#jstree_onderdelen').jstree({
     core: {
         data: {
             url: function (node) {
@@ -62,11 +64,22 @@ var tree=
         },
         check_callback: true, // Deze regel is nodig om .create_node te laten werken.
         multiple: false // Niet meerdere nodes tegelijk selecteren.
-    }
+    },
+    plugins : [ "dnd" ]
 });
 
 $('#jstree_onderdelen').bind("select_node.jstree", function (event, data) {
     geselecteerdeNode = data.node;
+});
+
+$('#jstree_onderdelen').bind("move_node.jstree", function (event, data) {
+    alert('van ' + data.old_parent + ' naar ' + data.parent);
+});
+
+$('#button_omhoog').click(function () {
+});
+
+$('#button_omlaag').click(function () {
 });
 
 $('#button_toevoegen').click(function () {
