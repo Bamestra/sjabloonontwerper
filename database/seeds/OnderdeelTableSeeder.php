@@ -46,5 +46,14 @@ class OnderdeelTableSeeder extends Seeder
             'naam' => 'Testonderdeel 2',
             'soort' => 2,
         ]);
+        
+        DB::table('onderdeel')->insert([
+            'sjabloon_id' => 1,
+            'id' => 5,
+            'parent_id' => 2,
+            'volgorde' => 3,
+            'naam' => 'Testonderdeel 3',
+            'soort' => 2,
+        ]);
     }
 }

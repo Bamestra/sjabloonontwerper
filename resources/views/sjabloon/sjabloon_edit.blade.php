@@ -77,9 +77,25 @@ $('#jstree_onderdelen').bind("move_node.jstree", function (event, data) {
 });
 
 $('#button_omhoog').click(function () {
+    $.ajax({
+        url: "{{ URL::to('onderdelen/verplaats/omhoog') }}/" + geselecteerdeNode.id,
+        complete: function (jqXHR, textStatus) {
+            if (textStatus === 'success') {
+                
+            }
+        }
+    });
 });
 
 $('#button_omlaag').click(function () {
+    $.ajax({
+        url: "{{ URL::to('onderdelen/verplaats/omlaag') }}/" + geselecteerdeNode.id,
+        complete: function (jqXHR, textStatus) {
+            if (textStatus === 'success') {
+                
+            }
+        }
+    });
 });
 
 $('#button_toevoegen').click(function () {

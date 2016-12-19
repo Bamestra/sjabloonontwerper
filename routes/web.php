@@ -19,3 +19,4 @@ Route::get('onderdelen/paginas/{sjabloon_id}', 'OnderdeelController@paginas');
 Route::get('onderdelen/children/{parent_id}', 'OnderdeelController@children');
 Route::get('onderdelen/create/{onderdeel_id}', 'OnderdeelController@create');
 Route::get('onderdelen/delete/{onderdeel_id}', 'OnderdeelController@delete');
+Route::get('onderdelen/verplaats/{richting}/{onderdeel_id}', 'OnderdeelController@verplaats');
