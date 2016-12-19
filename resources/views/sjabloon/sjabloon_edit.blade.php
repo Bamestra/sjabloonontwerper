@@ -36,8 +36,8 @@
 
                 <label for="input_soort">Soort</label>
                 <select class="form-control" id="input_soort">
-                    <option value="0">Groep</option>
-                    <option value="1">Onderdeel</option>
+                    <option value="1">Groep</option>
+                    <option value="2">Onderdeel</option>
                 </select>
 
                 <button class="btn btn-info">Opslaan</button>
